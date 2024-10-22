@@ -10,7 +10,7 @@ const Ajanda = () => {
               "\n        .ptnew-0 {\n            padding-left: 0rem !important;\n            padding-right: 0rem !important;\n        }\n\n        .ptnew-1 {\n            padding-left: 1rem !important;\n            padding-right: 1rem !important;\n        }\n    ",
           }}
         />
-        <div className="se-pre-con" />
+
         <div className="container">
           <div className="row ptnew">
             <div className="col-lg-8 col-md-7 col-sm-12 align-self-center ptnew2">

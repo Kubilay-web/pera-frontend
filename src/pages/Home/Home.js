@@ -107,8 +107,20 @@ const Home = () => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const [isOpen3, setIsOpen3] = useState(false);
 
   const toggleDropdown = () => {
+    console.log("Open");
+    setIsOpen2(!isOpen2);
+  };
+
+  const toggleOpen = () => {
+    console.log("Open");
+    setIsOpen3(!isOpen3);
+  };
+
+  const toggle = () => {
     console.log("Open");
     setIsOpen(!isOpen);
   };
@@ -362,7 +374,7 @@ const Home = () => {
             <div className="collapse navbar-collapse" id="navbarsExample09">
               <ul className="navbar-nav mr-auto justify-content-between w-100 text-uppercase">
                 <li
-                  onClick={toggleDropdown}
+                  onClick={toggle}
                   className={`nav-item text-black dropdown position-static ${
                     isOpen ? "show" : ""
                   }`}
@@ -426,7 +438,7 @@ const Home = () => {
 
                 <li
                   className={`nav-item dropdown position-static menuDropdownTopli ${
-                    isOpen ? "show" : ""
+                    isOpen2 ? "show" : ""
                   }`}
                 >
                   <a
@@ -434,18 +446,18 @@ const Home = () => {
                     href="#"
                     onClick={toggleDropdown}
                     aria-haspopup="true"
-                    aria-expanded={isOpen}
+                    aria-expanded={isOpen2}
                     data-bc={2}
                   >
                     SANAT
                     <img
-                      style={{ display: isOpen ? "visible" : "none" }}
+                      style={{ display: isOpen2 ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
                       src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
+                  <div className={`dropdown-menu ${isOpen2 ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -489,24 +501,29 @@ const Home = () => {
                 </li>
 
                 <span className="bol d-none d-lg-block  bg-dark" />
-                <li className="nav-item dropdown  position-static menuDropdownTopli nav-linkmedium">
+
+                <li
+                  onClick={toggleOpen}
+                  className={`nav-item text-black dropdown position-static ${
+                    isOpen3 ? "show" : ""
+                  }`}
+                >
                   <a
-                    className="nav-link dropdown-toggle nav-linklighter"
+                    className="nav-link dropdown-toggle font-weight-bolder nav-linkmedium"
                     href="#"
-                    data-toggle="dropdown"
                     aria-haspopup="true"
-                    aria-expanded="false"
+                    aria-expanded={isOpen3}
                     data-bc={3}
                   >
                     PERA ÖĞRENME
                     <img
-                      style={{ display: "none" }}
+                      style={{ display: isOpen3 ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
                       src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className="dropdown-menu">
+                  <div className={`dropdown-menu ${isOpen3 ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -528,13 +545,14 @@ const Home = () => {
                     </a>
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
-                      style={{ "margin-top": "-40px" }}
+                      style={{ marginTop: "-40px" }}
                       src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
                   </div>
                 </li>
+
                 <li className="nav-item dropdown  position-static menuDropdownTopli nav-linkmedium">
                   <a
                     className="nav-link dropdown-toggle nav-linklighter"
