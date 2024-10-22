@@ -1,29 +1,124 @@
-import React from "react";
+import { useState } from "react";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import ArticleCardSkeleton from "../../components/ArticleCardSkeleton";
+import ArticleCard from "../../components/ArticleCard";
+import { useQuery } from "@tanstack/react-query";
+import { getAllPosts } from "../../services/index/posts";
+import ErrorMessage from "../../components/ErrorMessage";
+import { toast } from "react-hot-toast";
+
+import { logout } from "../../store/actions/user";
 
 const Sergi = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [navIsVisible, setNavIsVisible] = useState(false);
+  const userState = useSelector((state) => state.user);
+  const [profileDrowpdown, setProfileDrowpdown] = useState(false);
+  const navVisibilityHandler = () => {
+    setNavIsVisible((curState) => {
+      return !curState;
+    });
+  };
+
+  const { data, isLoading, isError } = useQuery({
+    queryFn: () => getAllPosts("", 1, 15),
+    queryKey: ["posts"],
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error);
+    },
+  });
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
+
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isMessageVisible, setIsMessageVisible] = useState(false); // Mesajın görünürlük durumu
+
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleSubscription = async () => {
+    if (!email || !isValidEmail(email)) {
+      setMessage("Please enter valid email");
+      setEmail("");
+      setIsMessageVisible(true);
+      // 5 saniye sonra mesajı gizle
+      setTimeout(() => {
+        setIsMessageVisible(false);
+      }, 5000);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setMessage("Successful subscribed!");
+        setIsMessageVisible(true);
+        setEmail(""); // Başarı durumunda girişi temizle
+
+        // 5 saniye sonra mesajı gizle
+        setTimeout(() => {
+          setIsMessageVisible(false);
+        }, 5000);
+      } else {
+        setMessage("Already subscribed");
+        setEmail("");
+        setIsMessageVisible(true);
+
+        setTimeout(() => {
+          setIsMessageVisible(false);
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Please try again.");
+      setEmail("");
+      setIsMessageVisible(true);
+
+      setTimeout(() => {
+        setIsMessageVisible(false);
+      }, 5000);
+    }
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    console.log("Open");
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       <div>
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          &lt;iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-KMJKPWQ"
-          height="0" width="0"
-          style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;
-        </noscript>
-        {/* End Google Tag Manager (noscript) */}
         <style
           dangerouslySetInnerHTML={{
             __html:
               "\n        .ptnew-0 {\n            padding-left: 0rem !important;\n            padding-right: 0rem !important;\n        }\n\n        .ptnew-1 {\n            padding-left: 1rem !important;\n            padding-right: 1rem !important;\n        }\n    ",
           }}
         />
-        <div className="se-pre-con" />
+
         <div className="container">
           <div className="row ptnew">
             <div className="col-lg-8 col-md-7 col-sm-12 align-self-center ptnew2">
               <a className="navbar-brand" href="/" title="Home">
-                <div className="hidden">
+                <div>
                   <img
                     className="pera-logo component state2 state1-to-state2"
                     src="/Sergi/images/PM-2023logo-tr.svg"
@@ -64,10 +159,78 @@ const Sergi = () => {
                     />
                   </a>
                 </div>
+
+                <div
+                  className={`navbar ${navIsVisible ? "visible" : "hidden"}`}
+                >
+                  {userState.userInfo ? (
+                    <div className="user-info">
+                      <div className="dropdown">
+                        <button
+                          className="account-button"
+                          onClick={() => setProfileDrowpdown(!profileDrowpdown)}
+                        >
+                          <span>Account</span>
+                          <MdKeyboardArrowDown />
+                        </button>
+                        <div
+                          className={`dropdown-menu ${
+                            profileDrowpdown ? "show" : "hide"
+                          }`}
+                          onMouseLeave={() => setProfileDrowpdown(false)} // Dropdown dışına çıkıldığında gizle
+                        >
+                          <ul>
+                            {userState?.userInfo?.admin && (
+                              <li>
+                                <button
+                                  onClick={() => navigate("/admin")}
+                                  type="button"
+                                  className="menu-item"
+                                >
+                                  Admin Dashboard
+                                </button>
+                              </li>
+                            )}
+                            <li>
+                              <button
+                                onClick={() => navigate("/profile")}
+                                type="button"
+                                className="menu-item"
+                              >
+                                Profile Page
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                onClick={logoutHandler}
+                                type="button"
+                                className="menu-item"
+                              >
+                                Logout
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => navigate("/login")}
+                      className="signin-button"
+                    >
+                      Sign in
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-          <nav className="ml-auto mb-3 navbar navbar-expand-lg navbar-light bg-white border-top border-bottom border-dark sticky-top navbarheight ptnew-0">
+
+          <nav
+            style={{ zIndex: 998 }}
+            className="ml-auto mb-3 navbar navbar-expand-lg navbar-light bg-white border-top border-bottom border-dark sticky-top navbarheight ptnew-0"
+          >
+            {" "}
             <div
               className="container m-0 p-0   d-lg-none"
               style={{ width: "85%" }}
@@ -105,10 +268,10 @@ const Sergi = () => {
                   className="mobileSearchHideField"
                   href="https://www.peramuseum.org/"
                 >
-                  <img src="/Sergi/images/en_img.svg" alt className="imgnew" />
+                  <img src="/Home/images/en_img.svg" alt className="imgnew" />
                 </a>
                 <a className="linkSearch btnSrch" id="btnSrchMobile" href="#">
-                  <img src="/Sergi/images/search.svg" alt className="imgnew" />
+                  <img src="/Home/images/search.svg" alt className="imgnew" />
                 </a>
               </div>
             </div>
@@ -127,24 +290,28 @@ const Sergi = () => {
             </div>
             <div className="collapse navbar-collapse" id="navbarsExample09">
               <ul className="navbar-nav mr-auto justify-content-between w-100 text-uppercase">
-                <li className="nav-item dropdown position-static">
+                <li
+                  onClick={toggleDropdown}
+                  className={`nav-item text-black dropdown position-static ${
+                    isOpen ? "show" : ""
+                  }`}
+                >
                   <a
                     className="nav-link dropdown-toggle font-weight-bolder nav-link22 nav-linkbolder"
                     href="#"
-                    data-toggle="dropdown"
                     aria-haspopup="true"
-                    aria-expanded="false"
+                    aria-expanded={isOpen}
                     data-bc={1}
                   >
                     ZİYARET
                     <img
-                      style={{ display: "none" }}
+                      style={{ display: isOpen ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Sergi/images/leftArrow.svg"
+                      src="/Koleksiyon/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className="dropdown-menu">
+                  <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -152,7 +319,7 @@ const Sergi = () => {
                     >
                       ZİYARETİNİZİ PLANLAYIN
                     </a>
-                    {/*<a class="dropdown-item dropdown-menuitem" href="#">PERA MÜZESİ DOSTLUK PROGRAMI</a>*/}
+                    {/*<a className="dropdown-item dropdown-menuitem" href="#">PERA MÜZESİ DOSTLUK PROGRAMI</a>*/}
                     <a
                       className="dropdown-item dropdown-menuitem"
                       href="/pera-muzesi-hakkinda"
@@ -162,19 +329,21 @@ const Sergi = () => {
                     <a
                       className="dropdown-item dropdown-menuitem"
                       href="https://artshop.peramuzesi.org.tr"
-                      target="_out"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       ARTSHOP
                     </a>
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
-                      style={{ "margin-top": "-40px" }}
-                      src="/Sergi/images/xButton.svg"
+                      style={{ marginTop: "-40px" }}
+                      src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
                   </div>
                 </li>
+
                 <li className="nav-item dropdown  position-static">
                   <a
                     className="nav-link font-weight-bolder nav-link22 nav-linkbolder"
@@ -183,24 +352,29 @@ const Sergi = () => {
                     AJANDA
                   </a>
                 </li>
-                <li className="nav-item dropdown  position-static menuDropdownTopli menuDropdownTopli">
+
+                <li
+                  className={`nav-item dropdown position-static menuDropdownTopli ${
+                    isOpen ? "show" : ""
+                  }`}
+                >
                   <a
                     className="nav-link dropdown-toggle font-weight-bolder nav-link22 nav-linkbolder"
                     href="#"
-                    data-toggle="dropdown"
+                    onClick={toggleDropdown}
                     aria-haspopup="true"
-                    aria-expanded="false"
+                    aria-expanded={isOpen}
                     data-bc={2}
                   >
                     SANAT
                     <img
-                      style={{ display: "none" }}
+                      style={{ display: isOpen ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Sergi/images/leftArrow.svg"
+                      src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className="dropdown-menu">
+                  <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -235,13 +409,14 @@ const Sergi = () => {
                     </a>
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
-                      style={{ "margin-top": "-40px" }}
-                      src="/Sergi/images/xButton.svg"
+                      style={{ marginTop: "-40px" }}
+                      src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
                   </div>
                 </li>
+
                 <span className="bol d-none d-lg-block  bg-dark" />
                 <li className="nav-item dropdown  position-static menuDropdownTopli nav-linkmedium">
                   <a
@@ -256,7 +431,7 @@ const Sergi = () => {
                     <img
                       style={{ display: "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Sergi/images/leftArrow.svg"
+                      src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
@@ -283,7 +458,7 @@ const Sergi = () => {
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
                       style={{ "margin-top": "-40px" }}
-                      src="/Sergi/images/xButton.svg"
+                      src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
@@ -302,7 +477,7 @@ const Sergi = () => {
                     <img
                       style={{ display: "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Sergi/images/leftArrow.svg"
+                      src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
@@ -326,7 +501,7 @@ const Sergi = () => {
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
                       style={{ "margin-top": "-40px" }}
-                      src="/Sergi/images/xButton.svg"
+                      src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
@@ -345,7 +520,7 @@ const Sergi = () => {
                     <img
                       style={{ display: "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Sergi/images/leftArrow.svg"
+                      src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
@@ -396,7 +571,7 @@ const Sergi = () => {
                     <img
                       className="d-none d-lg-none subImg float-right ml-auto mb-3"
                       style={{ "margin-top": "-40px" }}
-                      src="/Sergi/images/xButton.svg"
+                      src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
@@ -420,7 +595,7 @@ const Sergi = () => {
                 >
                   <img
                     className="img-fluid2"
-                    src="/Sergi/images/PM-2023logo-tr.svg"
+                    src="/Home/images/PM-2023logo-tr.svg"
                     alt="Pera Müzesi Logo"
                   />
                 </a>
