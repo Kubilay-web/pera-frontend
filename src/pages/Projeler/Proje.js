@@ -4,26 +4,17 @@ const Proje = () => {
   return (
     <>
       <div>
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          &lt;iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-KMJKPWQ"
-          height="0" width="0"
-          style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;
-        </noscript>
-        {/* End Google Tag Manager (noscript) */}
         <style
           dangerouslySetInnerHTML={{
             __html:
               "\n        .ptnew-0 {\n            padding-left: 0rem !important;\n            padding-right: 0rem !important;\n        }\n\n        .ptnew-1 {\n            padding-left: 1rem !important;\n            padding-right: 1rem !important;\n        }\n    ",
           }}
         />
-        <div className="se-pre-con" />
         <div className="container">
           <div className="row ptnew">
             <div className="col-lg-8 col-md-7 col-sm-12 align-self-center ptnew2">
               <a className="navbar-brand" href="/" title="Home">
-                <div className="hidden">
+                <div>
                   <img
                     className="pera-logo component state2 state1-to-state2"
                     src="/Projeler/images/PM-2023logo-tr.svg"
