@@ -106,6 +106,13 @@ const Home = () => {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    console.log("Open");
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       <div>
@@ -289,10 +296,12 @@ const Home = () => {
               </div>
             </div>
           </div>
+
           <nav
-            style={{ zIndex: -99 }}
+            style={{ zIndex: 999 }}
             className="ml-auto mb-3 navbar navbar-expand-lg navbar-light bg-white border-top border-bottom border-dark sticky-top navbarheight ptnew-0"
           >
+            {" "}
             <div
               className="container m-0 p-0   d-lg-none"
               style={{ width: "85%" }}
@@ -352,24 +361,28 @@ const Home = () => {
             </div>
             <div className="collapse navbar-collapse" id="navbarsExample09">
               <ul className="navbar-nav mr-auto justify-content-between w-100 text-uppercase">
-                <li className="nav-item text-black dropdown position-static">
+                <li
+                  onClick={toggleDropdown}
+                  className={`nav-item text-black dropdown position-static ${
+                    isOpen ? "show" : ""
+                  }`}
+                >
                   <a
                     className="nav-link dropdown-toggle font-weight-bolder nav-link22 nav-linkbolder"
-                    href="/#"
-                    data-toggle="dropdown"
+                    href="#"
                     aria-haspopup="true"
-                    aria-expanded="false"
+                    aria-expanded={isOpen}
                     data-bc={1}
                   >
                     ZİYARET
                     <img
-                      style={{ display: "none" }}
+                      style={{ display: isOpen ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
-                      src="/Home/images/leftArrow.svg"
+                      src="/Koleksiyon/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className="dropdown-menu">
+                  <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -377,7 +390,7 @@ const Home = () => {
                     >
                       ZİYARETİNİZİ PLANLAYIN
                     </a>
-                    {/*<a class="dropdown-item dropdown-menuitem" href="#">PERA MÜZESİ DOSTLUK PROGRAMI</a>*/}
+                    {/*<a className="dropdown-item dropdown-menuitem" href="#">PERA MÜZESİ DOSTLUK PROGRAMI</a>*/}
                     <a
                       className="dropdown-item dropdown-menuitem"
                       href="/pera-muzesi-hakkinda"
@@ -387,19 +400,21 @@ const Home = () => {
                     <a
                       className="dropdown-item dropdown-menuitem"
                       href="https://artshop.peramuzesi.org.tr"
-                      target="_out"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       ARTSHOP
                     </a>
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
-                      style={{ "margin-top": "-40px" }}
+                      style={{ marginTop: "-40px" }}
                       src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
                   </div>
                 </li>
+
                 <li className="nav-item dropdown  position-static">
                   <a
                     className="nav-link font-weight-bolder nav-link22 nav-linkbolder"
@@ -408,24 +423,29 @@ const Home = () => {
                     AJANDA
                   </a>
                 </li>
-                <li className="nav-item dropdown  position-static menuDropdownTopli menuDropdownTopli">
+
+                <li
+                  className={`nav-item dropdown position-static menuDropdownTopli ${
+                    isOpen ? "show" : ""
+                  }`}
+                >
                   <a
                     className="nav-link dropdown-toggle font-weight-bolder nav-link22 nav-linkbolder"
                     href="#"
-                    data-toggle="dropdown"
+                    onClick={toggleDropdown}
                     aria-haspopup="true"
-                    aria-expanded="false"
+                    aria-expanded={isOpen}
                     data-bc={2}
                   >
                     SANAT
                     <img
-                      style={{ display: "none" }}
+                      style={{ display: isOpen ? "visible" : "none" }}
                       className="d-lg-none d-md-none topImg"
                       src="/Home/images/leftArrow.svg"
                       alt="sol"
                     />
                   </a>
-                  <div className="dropdown-menu">
+                  <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
                     <hr className="mt-0 pt-0 d-md-none d-sm-block" />
                     <a
                       className="dropdown-item dropdown-menuitem"
@@ -460,13 +480,14 @@ const Home = () => {
                     </a>
                     <img
                       className="d-none d-lg-none subImg float-right mb-3"
-                      style={{ "margin-top": "-40px" }}
+                      style={{ marginTop: "-40px" }}
                       src="/Home/images/xButton.svg"
                       alt="kapat"
                     />
                     <div className="w-100new" />
                   </div>
                 </li>
+
                 <span className="bol d-none d-lg-block  bg-dark" />
                 <li className="nav-item dropdown  position-static menuDropdownTopli nav-linkmedium">
                   <a
