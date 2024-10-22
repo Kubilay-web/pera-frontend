@@ -298,7 +298,7 @@ const Home = () => {
           </div>
 
           <nav
-            style={{ zIndex: 999 }}
+            style={{ zIndex: 998 }}
             className="ml-auto mb-3 navbar navbar-expand-lg navbar-light bg-white border-top border-bottom border-dark sticky-top navbarheight ptnew-0"
           >
             {" "}
