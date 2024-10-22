@@ -462,7 +462,7 @@ const Home = () => {
                     <a
                       id="Projects"
                       className="dropdown-item dropdown-menuitem"
-                      href="/projeler/1"
+                      href="/projeler"
                     >
                       PROJELER
                     </a>
