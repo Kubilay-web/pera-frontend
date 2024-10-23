@@ -5,7 +5,8 @@ import { images, stables } from "./constants";
 import { Link } from "react-router-dom";
 
 const ArticleCard = ({ post, className }) => {
-  const getPhotoUrl = (photo) => `${stables.CLOUDINARY_BASE_URL}${photo}`;
+  const getPhotoUrl = (version, photoName) =>
+    `${stables.CLOUDINARY_BASE_URL}v${version}/blog-app/${photoName}`; // Dinamik Cloudinary URL
 
   return (
     <div
@@ -15,7 +16,7 @@ const ArticleCard = ({ post, className }) => {
         <img
           src={
             post.photo
-              ? getPhotoUrl(post.photo) // Dinamik Cloudinary URL
+              ? getPhotoUrl(post.photo.version, post.photo.filename) // Dinamik URL
               : images.samplePostImage
           }
           className="object-center h-auto md:h-52 lg:h-48 xl:h-60"
@@ -35,7 +36,10 @@ const ArticleCard = ({ post, className }) => {
             <img
               src={
                 post.user.avatar
-                  ? getPhotoUrl(post.user.avatar) // Dinamik Cloudinary URL
+                  ? getPhotoUrl(
+                      post.user.avatar.version,
+                      post.user.avatar.filename
+                    ) // Dinamik URL
                   : images.userImage
               }
               alt="Post Profile"
