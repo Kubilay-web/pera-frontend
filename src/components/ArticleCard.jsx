@@ -13,10 +13,10 @@ const ArticleCard = ({ post, className }) => {
         <img
           src={
             post.photo
-              ? `${stables.UPLOAD_FOLDER_BASE_URL}${post.photo}`
+              ? `${stables.CLOUDINARY_BASE_URL}${post.photo}` // Dinamik Cloudinary URL
               : images.samplePostImage
           }
-          className=" object-center h-auto md:h-52 lg:h-48 xl:h-60"
+          className="object-center h-auto md:h-52 lg:h-48 xl:h-60"
           alt="Post Image"
         />
       </Link>
@@ -30,20 +30,20 @@ const ArticleCard = ({ post, className }) => {
 
         <div className="flex flex-col md:flex-row justify-between items-center mt-6">
           <div className="flex items-center gap-x-2 md:gap-x-2.5">
-            {/* <img
+            <img
               src={
                 post.user.avatar
-                  ? `${stables.UPLOAD_FOLDER_BASE_URL}${post.user.avatar}`
+                  ? `${stables.CLOUDINARY_BASE_URL}${post.user.avatar}` // Dinamik Cloudinary URL
                   : images.userImage
               }
               alt="Post Profile"
               className="w-9 h-9 md:w-10 md:h-10 rounded-full"
-            /> */}
+            />
             <div className="flex flex-col">
-              {/* <h4 className="font-bold italic text-dark-soft text-sm md:text-base">
+              <h4 className="font-bold italic text-dark-soft text-sm md:text-base">
                 {post.user.name}
-              </h4> */}
-              {/* <div className="flex items-center gap-x-2">
+              </h4>
+              <div className="flex items-center gap-x-2">
                 <span
                   className={`${
                     post.user.verified ? "bg-[#36B37E]" : "bg-red-500"
@@ -58,15 +58,15 @@ const ArticleCard = ({ post, className }) => {
                 <span className="italic text-dark-light text-xs md:text-sm">
                   {post.user.verified ? "Verified" : "Unverified"} writer
                 </span>
-              </div> */}
+              </div>
             </div>
           </div>
-          {/* <span className="font-bold text-dark-light italic text-sm md:text-base mt-2 md:mt-0">
+          <span className="font-bold text-dark-light italic text-sm md:text-base mt-2 md:mt-0">
             {new Date(post.createdAt).getDate()}{" "}
             {new Date(post.createdAt).toLocaleString("default", {
               month: "long",
             })}
-          </span> */}
+          </span>
         </div>
       </div>
     </div>

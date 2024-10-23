@@ -1,9 +1,8 @@
+const UPLOAD_FOLDER_BASE_URL = `${process.env.REACT_APP_API_BASE_URL}/uploads/`;
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const CLOUDINARY_URL = `${process.env.CLOUDINARY_CLOUD_NAME}.cloudinary.com/`;
+const CLOUDINARY_BASE_URL =
+  "https://res.cloudinary.com/dqqynqpwp/image/upload/v1729611960/blog-app/"; // Cloudinary base URL
 
-const stables = {
-  UPLOAD_FOLDER_BASE_URL: `https://${CLOUDINARY_URL}blog-app/`, // Yüklenen dosyaların Cloudinary URL'si
-  API_BASE_URL,
-};
+const stables = { UPLOAD_FOLDER_BASE_URL, API_BASE_URL, CLOUDINARY_BASE_URL };
 
 export default stables;
